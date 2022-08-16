@@ -9,7 +9,7 @@
       label-position="left"
     >
       <div class="title-container">
-        <h3 class="title">Login Form</h3>
+        <img src="../../assets/imgs/logo.png" alt="">
       </div>
 
       <el-form-item prop="username">
@@ -69,7 +69,7 @@
         type="primary"
         style="width: 100%; margin-bottom: 30px"
         @click.native.prevent="handleLogin"
-      >Login</el-button>
+      >登录</el-button>
 
       <div class="tips">
         <span style="margin-right: 20px">username: admin</span>
@@ -234,15 +234,16 @@ $light_gray: #eee;
     margin-left: -259px;
     width: 520px;
     max-width: 100%;
-    overflow: hidden;
     background-color: #fff;
     border-radius: 10px;
     padding: 76px 35px 0;
     box-shadow: 0 3px 70px 0 rgb(30 111 72 / 35%);
   }
+  // 验证码
   .keyImg {
     display: flex;
   }
+  // 验证码
 
   .tips {
     font-size: 14px;
@@ -267,12 +268,13 @@ $light_gray: #eee;
   .title-container {
     position: relative;
 
-    .title {
-      font-size: 26px;
-      color: $light_gray;
-      margin: 0px auto 40px auto;
-      text-align: center;
-      font-weight: bold;
+    img {
+      position: absolute;
+      width: 96px;
+      height: 96px;
+      top: -120px;
+      left: 50%;
+      margin-left: -48px;
     }
   }
 
