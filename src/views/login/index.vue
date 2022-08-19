@@ -18,7 +18,7 @@
         </span>
         <el-input
           ref="username"
-          v-model="loginForm.username"
+          v-model="loginForm.loginName"
           placeholder="Username"
           name="username"
           type="text"
@@ -55,11 +55,12 @@
             <i class="el-icon-picture-outline" />
           </span>
           <el-input
+            v-model="loginForm.code"
             placeholder="请输入验证码"
             tabindex="2"
             auto-complete="on"
           />
-          <img src="../../assets/imgs/test1.jpg" alt="" @click="changrImg">
+          <img :src="codeImgUrl" alt="" @click="changrImg">
         </span>
       </el-form-item>
       <!-- 验证码 -->
@@ -81,7 +82,7 @@
 
 <script>
 import { validUsername } from '@/utils/validate'
-
+import { getCode } from '@/api/user'
 export default {
   name: 'Login',
   data() {
@@ -93,7 +94,7 @@ export default {
       }
     }
     const validatePassword = (rule, value, callback) => {
-      if (value.length < 6) {
+      if (value.length < 1) {
         callback(new Error('The password can not be less than 6 digits'))
       } else {
         callback()
@@ -101,8 +102,14 @@ export default {
     }
     return {
       loginForm: {
-        username: 'admin',
-        password: '111111'
+        loginName: 'admin',
+        password: '111111',
+        code: '',
+        clientToken: '',
+        loginType: '',
+        account: '',
+        number: ''
+
       },
       loginRules: {
         username: [
@@ -114,7 +121,8 @@ export default {
       },
       loading: false,
       passwordType: 'password',
-      redirect: undefined
+      redirect: undefined,
+      codeImgUrl: ''
     }
   },
   watch: {
@@ -124,6 +132,9 @@ export default {
       },
       immediate: true
     }
+  },
+  mounted() {
+    this.getCodes()
   },
   methods: {
     showPwd() {
@@ -143,7 +154,7 @@ export default {
           this.$store
             .dispatch('user/login', this.loginForm)
             .then(() => {
-              this.$router.push({ path: this.redirect || '/' })
+              // this.$router.push({ path: this.redirect || '/' })
               this.loading = false
             })
             .catch(() => {
@@ -156,7 +167,14 @@ export default {
       })
     },
     changrImg() {
-      console.log(1233)
+      console.log(Math.ceil(Math.random() * 100))
+      this.getCodes()
+    },
+    async getCodes() {
+      this.number = Math.ceil(Math.random() * 100)
+      const res = await getCode(this.number)
+      console.log(res.request.responseURL)
+      this.codeImgUrl = res.request.responseURL
     }
   }
 }
@@ -168,7 +186,7 @@ export default {
 
 $bg: #283443;
 $light_gray: #fff;
-$cursor: #fff;
+$cursor: #999;
 
 @supports (-webkit-mask: none) and (not (cater-color: $cursor)) {
   .login-container .el-input input {
@@ -189,7 +207,7 @@ $cursor: #fff;
       -webkit-appearance: none;
       border-radius: 0px;
       padding: 12px 5px 12px 15px;
-      color: #999;
+      color: $cursor;
       height: 47px;
       caret-color: $cursor;
 
