@@ -12,7 +12,7 @@
         <img src="../../assets/imgs/logo.png" alt="">
       </div>
 
-      <el-form-item prop="username">
+      <el-form-item prop="loginName">
         <span class="svg-container">
           <i class="el-icon-mobile-phone" />
         </span>
@@ -86,16 +86,16 @@ import { getCode } from '@/api/user'
 export default {
   name: 'Login',
   data() {
-    const validateUsername = (rule, value, callback) => {
+    const validateUsername = (rules, value, callback) => {
       if (!validUsername(value)) {
         callback(new Error('Please enter the correct user name'))
       } else {
         callback()
       }
     }
-    const validatePassword = (rule, value, callback) => {
-      if (value.length < 1) {
-        callback(new Error('The password can not be less than 6 digits'))
+    const validatePassword = (rules, value, callback) => {
+      if (value.length < 5) {
+        callback(new Error('The password can not be less than 5 digits'))
       } else {
         callback()
       }
@@ -103,14 +103,13 @@ export default {
     return {
       loginForm: {
         loginName: 'admin',
-        password: '111111',
+        password: 'admin',
         code: '',
         clientToken: '',
-        loginType: '',
-        account: '',
-        number: ''
-
+        loginType: 0,
+        account: ''
       },
+      number: '',
       loginRules: {
         username: [
           { required: true, trigger: 'blur', validator: validateUsername }
@@ -148,13 +147,14 @@ export default {
       })
     },
     handleLogin() {
+      console.log(this.loginForm)
       this.$refs.loginForm.validate((valid) => {
         if (valid) {
           this.loading = true
           this.$store
             .dispatch('user/login', this.loginForm)
             .then(() => {
-              // this.$router.push({ path: this.redirect || '/' })
+              this.$router.push({ path: this.redirect || '/' })
               this.loading = false
             })
             .catch(() => {
@@ -172,6 +172,7 @@ export default {
     },
     async getCodes() {
       this.number = Math.ceil(Math.random() * 100)
+      this.loginForm.clientToken = this.number
       const res = await getCode(this.number)
       console.log(res.request.responseURL)
       this.codeImgUrl = res.request.responseURL
