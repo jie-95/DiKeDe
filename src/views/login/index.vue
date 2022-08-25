@@ -60,7 +60,11 @@
             tabindex="2"
             auto-complete="on"
           />
-          <img :src="codeImgUrl" alt="" @click="changrImg">
+          <img
+            :src="`/api/user-service/user/imageCode/${loginForm.clientToken}`"
+            alt=""
+            @click="loginForm.clientToken = Math.random()"
+          >
         </span>
       </el-form-item>
       <!-- 验证码 -->
@@ -105,11 +109,9 @@ export default {
         loginName: 'admin',
         password: 'admin',
         code: '',
-        clientToken: '',
-        loginType: 0,
-        account: ''
+        clientToken: Math.random(),
+        loginType: 0
       },
-      number: '',
       loginRules: {
         username: [
           { required: true, trigger: 'blur', validator: validateUsername }
@@ -133,7 +135,7 @@ export default {
     }
   },
   mounted() {
-    this.getCodes()
+    // this.getCodes()
   },
   methods: {
     showPwd() {
@@ -147,7 +149,6 @@ export default {
       })
     },
     handleLogin() {
-      console.log(this.loginForm)
       this.$refs.loginForm.validate((valid) => {
         if (valid) {
           this.loading = true
@@ -166,16 +167,9 @@ export default {
         }
       })
     },
-    changrImg() {
-      console.log(Math.ceil(Math.random() * 100))
-      this.getCodes()
-    },
     async getCodes() {
-      this.number = Math.ceil(Math.random() * 100)
-      this.loginForm.clientToken = this.number
-      const res = await getCode(this.number)
-      console.log(res.request.responseURL)
-      this.codeImgUrl = res.request.responseURL
+      const res = await getCode(this.clientToken)
+      console.log(res)
     }
   }
 }

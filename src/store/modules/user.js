@@ -1,42 +1,60 @@
 import { login } from '@/api/user'
-import { getToken, setToken } from '@/utils/auth'
+import { getToken, setToken, removeToken } from '@/utils/auth'
 
 export default {
   namespaced: true,
   state: {
-    token: getToken()
+    token: getToken(),
+    HrsaasTime: '',
+    userInfo: {}
   },
-  mutation: {
+  mutations: {
     setToken(state, token) {
       state.token = token
       setToken(token)
+    },
+    removeToken(state) {
+      state.token = null
+      removeToken()
+    },
+    setHrsaasTime(state, time) {
+      state.HrsaasTime = time
     }
   },
   actions: {
+    // 通过接口获取token
     async login({ commit }, data) {
-      const res = await login(data)
-      console.log(res)
+      // console.log(data)
+      try {
+        const res = await login(data)
+        console.log(res)
+        if (res.success) {
+          commit('setToken', res)
+          commit('setHrsaasTime', +new Date())
+        } else {
+          console.log(res.msg)
+        }
+      } catch (error) {
+        console.log(error)
+      }
+    },
+    logout({ commit }) {
+      commit('removeToken')
     }
   }
 }
-
 // export default {
 //   namespaced: true,
 //   state: {
 //     token: getToken()
 //   },
-//   mutations: {
+//   mutation: {
 //     setToken(state, token) {
 //       state.token = token
 //       setToken(token)
-//     },
-//     removeToken(state) {
-//       state.token = null
-//       removeToken()
 //     }
 //   },
 //   actions: {
-//     // 通过接口获取token
 //     async login({ commit }, data) {
 //       const res = await login(data)
 //       console.log(res)
