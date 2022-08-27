@@ -27,12 +27,12 @@ export default {
       // console.log(data)
       try {
         const res = await login(data)
-        console.log(res)
-        if (res.success) {
-          commit('setToken', res)
+        console.log(res.data.token)
+        if (res.data.success) {
+          commit('setToken', res.data.token)
           commit('setHrsaasTime', +new Date())
         } else {
-          console.log(res.msg)
+          return new Error('验证码错误')
         }
       } catch (error) {
         console.log(error)

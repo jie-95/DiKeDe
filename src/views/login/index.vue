@@ -17,10 +17,8 @@
           <i class="el-icon-mobile-phone" />
         </span>
         <el-input
-          ref="username"
           v-model="loginForm.loginName"
           placeholder="Username"
-          name="username"
           type="text"
           tabindex="1"
           auto-complete="on"
@@ -37,7 +35,6 @@
           v-model="loginForm.password"
           :type="passwordType"
           placeholder="Password"
-          name="password"
           tabindex="2"
           auto-complete="on"
           @keyup.enter.native="handleLogin"
@@ -49,7 +46,7 @@
         </span>
       </el-form-item>
       <!-- 验证码 -->
-      <el-form-item>
+      <el-form-item prop="code">
         <span class="keyImg">
           <span class="svg-container">
             <i class="el-icon-picture-outline" />
@@ -85,25 +82,24 @@
 </template>
 
 <script>
-import { validUsername } from '@/utils/validate'
 import { getCode } from '@/api/user'
 export default {
   name: 'Login',
   data() {
-    const validateUsername = (rules, value, callback) => {
-      if (!validUsername(value)) {
-        callback(new Error('Please enter the correct user name'))
-      } else {
-        callback()
-      }
-    }
-    const validatePassword = (rules, value, callback) => {
-      if (value.length < 5) {
-        callback(new Error('The password can not be less than 5 digits'))
-      } else {
-        callback()
-      }
-    }
+    // const validateUsername = (rules, value, callback) => {
+    //   if (!validUsername(value)) {
+    //     callback(new Error('Please enter the correct user name'))
+    //   } else {
+    //     callback()
+    //   }
+    // }
+    // const validatePassword = (rules, value, callback) => {
+    //   if (value.length < 5) {
+    //     callback(new Error('The password can not be less than 5 digits'))
+    //   } else {
+    //     callback()
+    //   }
+    // }
     return {
       loginForm: {
         loginName: 'admin',
@@ -113,11 +109,16 @@ export default {
         loginType: 0
       },
       loginRules: {
-        username: [
-          { required: true, trigger: 'blur', validator: validateUsername }
+        loginName: [
+          { required: true, trigger: 'blur', message: '用户名格式错误' },
+          { min: 5, max: 16, trigger: 'blur' }
         ],
         password: [
-          { required: true, trigger: 'blur', validator: validatePassword }
+          { required: true, trigger: 'blur', message: '密码格式错误' }
+        ],
+        code: [
+          { required: true, trigger: 'blur', message: '验证码格式错误' },
+          { min: 4, max: 4, trigger: 'blur' }
         ]
       },
       loading: false,
@@ -148,24 +149,25 @@ export default {
         this.$refs.password.focus()
       })
     },
-    handleLogin() {
-      this.$refs.loginForm.validate((valid) => {
-        if (valid) {
-          this.loading = true
-          this.$store
-            .dispatch('user/login', this.loginForm)
-            .then(() => {
-              this.$router.push({ path: this.redirect || '/' })
-              this.loading = false
-            })
-            .catch(() => {
-              this.loading = false
-            })
-        } else {
-          console.log('error submit!!')
-          return false
-        }
-      })
+    async handleLogin() {
+      try {
+        await this.$refs.loginForm.validate()
+        await this.$store.dispatch('user/login', this.loginForm)
+        this.$router.push('/')
+      } catch (error) {
+        console.log(error)
+      }
+      // this.loading = true
+      // console.log(this.$store.dispatch('user/login', this.loginForm))
+      // this.$store.dispatch('user/login', this.loginForm)
+      //   .then(() => {
+      //     console.log(132132)
+      //     this.$router.push({ path: this.redirect || '/' })
+      //     this.loading = false
+      //   })
+      //   .catch(() => {
+      //     this.loading = false
+      //   })
     },
     async getCodes() {
       const res = await getCode(this.clientToken)

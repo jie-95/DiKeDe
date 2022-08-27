@@ -1,7 +1,5 @@
 <template>
   <div class="navbar">
-    <hamburger :is-active="sidebar.opened" class="hamburger-container" @toggleClick="toggleSideBar" />
-
     <div class="right-menu">
       <el-dropdown class="avatar-container" trigger="click">
         <div class="avatar-wrapper">
@@ -22,6 +20,7 @@
 import { mapGetters } from 'vuex'
 
 export default {
+  name: 'Navbar',
   components: {},
   computed: {
     ...mapGetters(['sidebar', 'avatar'])

@@ -4,10 +4,10 @@ import store from '@/store'
 import { Message } from 'element-ui'
 
 // 判断超时
-// const timeout = 3600
-// function isCheckOut() {
-//   return (Date.now() - store.getters.HrsaasTime) / 1000 > timeout
-// }
+const timeout = 3600
+function isCheckOut() {
+  return (Date.now() - store.getters.HrsaasTime) / 1000 > timeout
+}
 // create an axios instance
 const service = axios.create({
   baseURL: process.env.VUE_APP_BASE_API, // url = base url + request url
@@ -15,12 +15,19 @@ const service = axios.create({
   timeout: 5000 // request timeout
 })
 
-// request interceptor
+// 请求拦截器
 service.interceptors.request.use(
   (config) => {
     // console.log(config)
     if (store.getters.token) {
-      config.headers['Authorization'] = `Bearer ${store.getters.token}`
+      // console.log('======', isCheckOut())
+      if (isCheckOut()) {
+        store.dispatch('user/logout')
+        router.push('/login')
+        Message.error('接口超时')
+        return Promise.reject(new Error('接口超时'))
+      }
+      config.headers['Authorization'] = `${store.getters.token}`
     }
     return config
   },
@@ -30,22 +37,23 @@ service.interceptors.request.use(
 )
 service.interceptors.response.use(
   (response) => {
-    const { data } = response
-    console.log(response)
-    if (data.success) {
-      Message.success(data.msg)
-      return data
-    } else {
-      Message.error(data.msg)
-      return Promise.reject(new Error(data.msg))
-    }
+    return response
+  //   const { data } = response
+  //   // console.log(response)
+  //   if (response.status === 200) {
+  //     Message.success(data.msg)
+  //     return data
+  //   } else {
+  //     Message.error(data.msg)
+  //     return Promise.reject(new Error(data.msg))
+  //   }
   },
   (err) => {
     if (err.response && err.response.data && err.response.data.code === 10002) {
       store.dispatch('user/logout')
       router.push('/login')
     }
-    Message.error(err.msg || '')
+    // Message.error(err.msg || '')
     return Promise.reject(err)
   }
 )

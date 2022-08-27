@@ -1,8 +1,9 @@
 import request from '@/utils/request'
 
-export function getAllTaskStatus() {
+export function getTaskList(params) {
   return request({
-    url: '/api/task-service/task/allTaskStatus',
-    method: 'get'
+    url: '/api/task-service/task/search',
+    method: 'GET',
+    params
   })
 }
