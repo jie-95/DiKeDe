@@ -21,12 +21,12 @@ export default {
     {
       path: 'business',
       component: () => import('@/views/task/business'),
-      meta: { title: '运维工单1' }
+      meta: { title: '运营工单' }
     },
     {
       path: 'operation',
       component: () => import('@/views/task/operation'),
-      meta: { title: '运维工单2' }
+      meta: { title: '运维工单' }
     }
   ]
 }

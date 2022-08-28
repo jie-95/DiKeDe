@@ -26,9 +26,14 @@
       <el-table-column prop="taskStatus" label="工单状态" width="180" />
       <el-table-column prop="userName" label="运营人员" width="180" />
       <el-table-column prop="createTime" label="创建日期" width="180" />
-      <el-table-column
-        label="操作"
-      ><span style="color: #5f84ff">查看详情</span></el-table-column>
+      <el-table-column label="操作">
+        <template slot-scope="{ row }" style="color: #5f84ff">
+          <el-button
+            type="text"
+            size="small"
+            @click="showDetail(row.regionId)"
+          >查看</el-button>
+        </template></el-table-column>
     </el-table>
     <!-- 分页 -->
 
@@ -46,12 +51,19 @@
       />
     </el-row>
     <!-- 分页 -->
+    <!-- 详情页组件 -->
+    <detail :dialog-visible.sync="dialogVisible" />
+    <!-- 详情页组件 -->
   </div>
 </template>
 
 <script>
+import detail from './detail.vue'
 import { getTaskList } from '@/api/task'
 export default {
+  components: {
+    detail
+  },
   data() {
     return {
       tableData: [],
@@ -59,7 +71,8 @@ export default {
         pageIndex: 1,
         pageSize: 10
       },
-      total: ''
+      total: '',
+      dialogVisible: false
     }
   },
   mounted() {
@@ -85,6 +98,10 @@ export default {
       } catch (error) {
         console.log(error)
       }
+    },
+    showDetail(id) {
+      console.log(id)
+      this.dialogVisible = true
     }
   }
 }

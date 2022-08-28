@@ -279,7 +279,7 @@
 }
 
 .el-dialog__header {
-  background: #66b1ff;
+  background: #fff;
 }
 
 .el-dialog__header .el-icon-close:before {
@@ -287,7 +287,7 @@
 }
 
 .el-dialog__header .el-dialog__title {
-  color: #fff;
+  color: #000;
 }
 
 .fa-eye {
@@ -704,7 +704,7 @@
 }
 
 #app .sidebar-container .is-active > .el-submenu__title {
-  color: #f4f4f5 !important;
+  color: #000 !important;
 }
 
 #app .sidebar-container .nest-menu .el-submenu > .el-submenu__title,
