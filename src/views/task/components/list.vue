@@ -52,7 +52,7 @@
     </el-row>
     <!-- 分页 -->
     <!-- 详情页组件 -->
-    <detail :dialog-visible.sync="dialogVisible" />
+    <detail :dialog-visible.sync="dialogVisible" />,
     <!-- 详情页组件 -->
   </div>
 </template>

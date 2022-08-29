@@ -1,31 +1,38 @@
 <template>
-  <div>
-    <el-dialog title="收货地址" :visible.sync="dialogVisible">
+  <div class="boseBox">
+    <el-dialog
+      class="dialogTitle"
+      title="收货地址"
+      :visible.sync="dialogVisible"
+      width="40%"
+    >
+      <el-row class="task-status" />
+
       <el-row>
         <el-form>
           <el-col :span="12">
-            <el-form-item label="活动名称">1234</el-form-item>
+            <el-form-item label="设备编号：">1234</el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="活动名称">1234</el-form-item>
+            <el-form-item label="创建日期：">1234</el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="活动名称">1234</el-form-item>
+            <el-form-item label="取消日期：">1234</el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="活动名称">1234</el-form-item>
+            <el-form-item label="运营人员：">1234</el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="活动名称">1234</el-form-item>
+            <el-form-item label="工单类型：">1234</el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="活动名称">1234</el-form-item>
+            <el-form-item label="补货数量：">1234</el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="活动名称">1234</el-form-item>
+            <el-form-item label="工单方式：">1234</el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="活动名称">1234</el-form-item>
+            <el-form-item label="取消原因：">1234</el-form-item>
           </el-col>
         </el-form>
       </el-row>
@@ -91,18 +98,39 @@ export default {
   }
 }
 </script>
-
+<style>
+.el-dialog__body {
+  padding: 0 20px ;
+}
+</style>
 <style lang="scss" scoped>
 .el-row {
   margin-bottom: 20px;
-  border-radius: 4px;
+  padding: 0 20px;
   &:last-child {
     margin-bottom: 0;
   }
 }
+.task-status {
+  // border-radius: 20px;
+  background-color: #606266;
+  height: 54px;
+}
 .el-col {
   //     background-color: #ccc;
   //   border-radius: 4px;
+  line-height: 36px;
+  & .el-form-item__label {
+    text-align: right;
+    vertical-align: middle;
+    float: left;
+    font-size: 14px;
+    color: #606266;
+    line-height: 40px;
+    padding: 0 12px 0 0;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+  }
 }
 
 .grid-content {
